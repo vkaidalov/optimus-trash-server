@@ -123,9 +123,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 # Substituting a custom `User` model for the authorization
 AUTH_USER_MODEL = 'users.User'
 
+
+# Django REST framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+
+# Import `local_settings.py` if exists
 try:
     from .local_settings import *
 except ImportError:
