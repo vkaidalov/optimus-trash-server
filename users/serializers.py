@@ -2,13 +2,15 @@ from rest_framework import serializers
 from .models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email',
+        fields = ('url', 'username', 'password', 'email', 'date_joined',
                   'first_name', 'last_name', 'is_confirmed',)
-        write_only_fields = ('password',)
         read_only_fields = ('is_confirmed', 'date_joined')
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def create(self, validated_data):
         user = User.objects.create(
