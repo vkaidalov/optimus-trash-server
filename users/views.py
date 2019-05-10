@@ -1,3 +1,5 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
@@ -9,30 +11,14 @@ from .serializers import UserSerializer, ConfirmationSerializer
 
 
 class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
-
-    def get_queryset(self):
-        """
-        This specifies filters, such as `username_contains`, `is_confirmed`.
-        """
-        queryset = User.objects.all().order_by('id')
-
-        username_contains = self.request.query_params.get(
-            'username_contains', None
-        )
-        if username_contains is not None:
-            queryset = queryset.filter(username__contains=username_contains)
-
-        is_confirmed = self.request.query_params.get(
-            'is_confirmed', None
-        )
-        is_confirmed = True if is_confirmed == 'true' \
-            else False if is_confirmed == 'false' \
-            else None
-        if is_confirmed is not None:
-            queryset = queryset.filter(is_confirmed=is_confirmed)
-
-        return queryset
+    filter_backends = (DjangoFilterBackend,
+                       filters.SearchFilter,
+                       filters.OrderingFilter)
+    filterset_fields = ('is_confirmed',)
+    search_fields = ('username',)
+    ordering_fields = ('date_joined',)
 
 
 class UserDetail(generics.RetrieveUpdateAPIView):
