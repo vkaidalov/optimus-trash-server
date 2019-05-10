@@ -36,3 +36,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         instance.save()
         return instance
+
+
+class ConfirmationSerializer(serializers.Serializer):
+    is_confirmed = serializers.BooleanField(required=True)
+
+    def create(self, validated_data):
+        return validated_data['is_confirmed']
+
+    def update(self, instance, validated_data):
+        instance = validated_data['is_confirmed']
+        return instance

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, ConfirmationSerializer
 
 
 class UserSerializerTest(TestCase):
@@ -54,3 +54,24 @@ class UserSerializerTest(TestCase):
         }
         serializer = UserSerializer(user, data=data, partial=True)
         self.assertFalse(serializer.is_valid())
+
+
+class ConfirmationSerializerTest(TestCase):
+    def test_create(self):
+        data = {
+            'is_confirmed': True
+        }
+        serializer = ConfirmationSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+        is_confirmed = serializer.save()
+        self.assertTrue(is_confirmed)
+
+    def test_update(self):
+        data = {
+            'is_confirmed': False
+        }
+        is_confirmed = True
+        serializer = ConfirmationSerializer(is_confirmed, data=data)
+        self.assertTrue(serializer.is_valid())
+        is_confirmed = serializer.save()
+        self.assertFalse(is_confirmed)
