@@ -11,3 +11,13 @@ class IsAccountOwnerOrReadOnly(permissions.BasePermission):
             return True
 
         return obj == request.user
+
+
+class IsSuperUser(permissions.BasePermission):
+    """
+    Custom permission to only allow the database administrator
+    (the `is_superuser` field) to do something.
+    """
+
+    def has_permission(self, request, view):
+        return request.user.is_superuser
