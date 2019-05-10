@@ -9,8 +9,30 @@ from .serializers import UserSerializer, ConfirmationSerializer
 
 
 class UserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        """
+        This specifies filters, such as `username_contains`, `is_confirmed`.
+        """
+        queryset = User.objects.all().order_by('id')
+
+        username_contains = self.request.query_params.get(
+            'username_contains', None
+        )
+        if username_contains is not None:
+            queryset = queryset.filter(username__contains=username_contains)
+
+        is_confirmed = self.request.query_params.get(
+            'is_confirmed', None
+        )
+        is_confirmed = True if is_confirmed == 'true' \
+            else False if is_confirmed == 'false' \
+            else None
+        if is_confirmed is not None:
+            queryset = queryset.filter(is_confirmed=is_confirmed)
+
+        return queryset
 
 
 class UserDetail(generics.RetrieveUpdateAPIView):
