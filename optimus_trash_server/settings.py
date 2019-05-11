@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'corsheaders',
     'django_filters',
 
     'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -150,6 +152,12 @@ REST_FRAMEWORK = {
     ),
 }
 
+# A setting from the `django-cors-headers`.
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Restricts sending CORS headers from URLs that don't match
+# the regex, such as `/admin/`.
+CORS_URLS_REGEX = r'^/api/.*$'
 
 # Import `local_settings.py` if exists
 try:
