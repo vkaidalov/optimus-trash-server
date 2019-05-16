@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -128,10 +130,10 @@ STATIC_URL = '/static/'
 
 
 # Substituting a custom `User` model for the authorization
+
 AUTH_USER_MODEL = 'users.User'
 
 
-# Django REST framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -152,15 +154,24 @@ REST_FRAMEWORK = {
     ),
 }
 
-# A setting from the `django-cors-headers`.
-CORS_ORIGIN_ALLOW_ALL = True
 
-# Restricts sending CORS headers from URLs that don't match
-# the regex, such as `/admin/`.
+SIMPLE_JWT = {
+    # Extending the default 5 minutes to one hour.
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+}
+
+
+# CORS headers are only sent with responses to such requests.
+
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
 
-# Import `local_settings.py` if exists
+
+# Importing a file with local settings for the current environment
+
 try:
     from .local_settings import *
-except ImportError:
-    pass
+except ImportError as e:
+    raise ImportError(
+        'A "local_settings.py" file must exist alongside with the "settings.py".'
+    ) from e

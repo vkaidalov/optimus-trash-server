@@ -16,7 +16,7 @@ class IsAccountOwnerOrReadOnly(permissions.BasePermission):
 class IsSuperUser(permissions.BasePermission):
     """
     Custom permission to only allow the database administrator
-    (the `is_superuser` field) to do something.
+    (`is_superuser == True`) to do something.
     """
 
     def has_permission(self, request, view):
