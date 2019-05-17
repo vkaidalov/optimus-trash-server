@@ -21,3 +21,13 @@ class IsSuperUser(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.user.is_superuser
+
+
+class IsConfirmedOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow a confirmed user
+    (`is_confirmed == True`) to do something.
+    """
+
+    def has_permission(self, request, view):
+        return request.user.is_confirmed

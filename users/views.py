@@ -6,7 +6,11 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from .models import User
-from .permissions import IsAccountOwnerOrReadOnly, IsSuperUser
+from .permissions import (
+    IsAccountOwnerOrReadOnly,
+    IsSuperUser,
+    IsConfirmedOrReadOnly
+)
 from .serializers import UserSerializer, ConfirmationSerializer
 
 
@@ -23,7 +27,8 @@ class UserList(generics.ListCreateAPIView):
 
 class UserDetail(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsAccountOwnerOrReadOnly)
+                          IsAccountOwnerOrReadOnly,
+                          IsConfirmedOrReadOnly)
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
