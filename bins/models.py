@@ -39,6 +39,13 @@ class Bin(models.Model):
     current_weight = models.FloatField(
         default=0.0
     )
+    fullness = models.FloatField(
+        default=0.0
+    )
+
+    def save(self, *args, **kwargs):
+        self.fullness = self.current_weight / self.max_weight
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return "id: {}; coords: {}:{}; fullness: {}/{}".format(
