@@ -48,7 +48,7 @@ class Bin(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "id: {}; coords: {}:{}; fullness: {}/{}".format(
+        return "id: {}; lat: {}; long: {}; fullness: {}/{}".format(
             str(self.id),
             str(self.longitude),
             str(self.latitude),
