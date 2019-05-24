@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from users.permissions import IsConfirmedOrReadOnly
 from .models import Bin
+from .permissions import IsBinOwnerOrReadOnly
 from .serializers import BinSerializer
 
 
@@ -21,6 +22,9 @@ class BinList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class BinDetail(generics.RetrieveAPIView):
+class BinDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          IsConfirmedOrReadOnly,
+                          IsBinOwnerOrReadOnly,)
     queryset = Bin.objects.all()
     serializer_class = BinSerializer
