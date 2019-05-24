@@ -50,8 +50,8 @@ class Bin(models.Model):
     def __str__(self):
         return "id: {}; lat: {}; long: {}; fullness: {}/{}".format(
             str(self.id),
-            str(self.longitude),
             str(self.latitude),
+            str(self.longitude),
             str(self.current_weight),
             str(self.max_weight)
         )
