@@ -45,6 +45,10 @@ class Bin(models.Model):
         default=0.0
     )
 
+    def refresh_token(self):
+        self.token = generate_token(BIN_TOKEN_LENGTH)
+        self.save()
+
     def save(self, *args, **kwargs):
         self.fullness = self.current_weight / self.max_weight
         super().save(*args, **kwargs)

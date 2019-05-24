@@ -1,8 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, generics
+from rest_framework import filters, generics, status
 from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly, IsAuthenticated
 )
+from rest_framework.response import Response
 
 from users.permissions import (
     IsConfirmedOrReadOnly, IsConfirmed
@@ -42,3 +43,20 @@ class BinTokenDetail(generics.RetrieveAPIView):
                           IsBinOwner,)
     queryset = Bin.objects.all()
     serializer_class = BinTokenSerializer
+
+
+class BinTokenRefresh(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,
+                          IsConfirmed,
+                          IsBinOwner,)
+    queryset = Bin.objects.all()
+    serializer_class = BinTokenSerializer
+
+    def post(self, _request, *_args, **_kwargs):
+        trash_bin = self.get_object()
+        trash_bin.refresh_token()
+        bin_token_serializer = BinTokenSerializer(trash_bin)
+        return Response(
+            bin_token_serializer.data,
+            status=status.HTTP_201_CREATED
+        )
