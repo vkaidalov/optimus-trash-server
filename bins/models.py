@@ -5,6 +5,8 @@ from django.utils import timezone
 from optimus_trash_server.settings import AUTH_USER_MODEL
 from .tokens import generate_token
 
+BIN_TOKEN_LENGTH = 64
+
 
 class Bin(models.Model):
     owner = models.ForeignKey(
@@ -13,8 +15,8 @@ class Bin(models.Model):
         on_delete=models.CASCADE
     )
     token = models.CharField(
-        max_length=64,
-        default=partial(generate_token, 64)
+        max_length=BIN_TOKEN_LENGTH,
+        default=partial(generate_token, BIN_TOKEN_LENGTH)
     )
     date_created = models.DateTimeField(
         default=timezone.now

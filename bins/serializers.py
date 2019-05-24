@@ -8,7 +8,7 @@ class BinSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bin
         fields = (
-            'url', 'id', 'owner', 'token', 'date_created',
+            'url', 'id', 'owner', 'date_created',
             'longitude', 'latitude', 'max_weight',
             'current_weight', 'fullness'
         )
