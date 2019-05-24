@@ -1,11 +1,17 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    IsAuthenticatedOrReadOnly, IsAuthenticated
+)
 
-from users.permissions import IsConfirmedOrReadOnly
+from users.permissions import (
+    IsConfirmedOrReadOnly, IsConfirmed
+)
 from .models import Bin
-from .permissions import IsBinOwnerOrReadOnly
-from .serializers import BinSerializer
+from .permissions import (
+    IsBinOwnerOrReadOnly, IsBinOwner
+)
+from .serializers import BinSerializer, BinTokenSerializer
 
 
 class BinList(generics.ListCreateAPIView):
@@ -28,3 +34,11 @@ class BinDetail(generics.RetrieveUpdateDestroyAPIView):
                           IsBinOwnerOrReadOnly,)
     queryset = Bin.objects.all()
     serializer_class = BinSerializer
+
+
+class BinTokenDetail(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,
+                          IsConfirmed,
+                          IsBinOwner,)
+    queryset = Bin.objects.all()
+    serializer_class = BinTokenSerializer

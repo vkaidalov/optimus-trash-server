@@ -34,3 +34,8 @@ class IsConfirmedOrReadOnly(permissions.BasePermission):
             return True
 
         return request.user.is_confirmed
+
+
+class IsConfirmed(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_confirmed

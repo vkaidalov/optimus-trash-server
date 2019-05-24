@@ -15,3 +15,10 @@ class BinSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = (
             'date_created', 'fullness'
         )
+
+
+class BinTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bin
+        fields = ('token',)
+        read_only_fields = ('token',)
